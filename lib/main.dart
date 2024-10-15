@@ -80,23 +80,31 @@ class _MyAppState extends State<MyApp> {
     final TextStyle labelStyle = TextStyle(fontSize: 24, color: Colors.grey[700]);
 
     return MaterialApp(
+      theme: ThemeData(
+      ),
       debugShowCheckedModeBanner: false,
       title: 'Measures Converter',
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Measures Converter'),
+          centerTitle: true,
+          backgroundColor: Colors.teal, // Change the appBar color for a more modern look
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.all(20), // Uniform padding for the entire page
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // Align text to start for a clean layout
             children: [
               const Spacer(),
-              Text('Value', style: labelStyle),
-              const Spacer(),
+              Text('Enter Value:', style: labelStyle.copyWith(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8), // Add space between label and input
               TextField(
                 style: inputStyle,
-                decoration: const InputDecoration(
-                    hintText: 'Please insert the measure to be converted'),
+                decoration: InputDecoration(
+                  hintText: 'Please insert the measure to be converted',
+                  border: OutlineInputBorder(), // Outline border for better input field visibility
+                  contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                ),
                 onChanged: (text) {
                   var rv = double.tryParse(text);
                   if (rv != null) {
@@ -106,7 +114,9 @@ class _MyAppState extends State<MyApp> {
                   }
                 },
               ),
-              const Spacer(),
+              const SizedBox(height: 16), // Add space between fields
+              Text('From:', style: labelStyle.copyWith(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
               DropdownButton<String>(
                 isExpanded: true,
                 items: _measures.map((String value) {
@@ -121,10 +131,11 @@ class _MyAppState extends State<MyApp> {
                   });
                 },
                 value: _startMeasure,
+                style: inputStyle, // Match the dropdown style with the input field
               ),
-              const Spacer(),
-              Text('To', style: labelStyle),
-              const Spacer(),
+              const SizedBox(height: 16),
+              Text('To:', style: labelStyle.copyWith(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
               DropdownButton<String>(
                 isExpanded: true,
                 items: _measures.map((String value) {
@@ -139,30 +150,42 @@ class _MyAppState extends State<MyApp> {
                   });
                 },
                 value: _convertedMeasure,
+                style: inputStyle,
               ),
-              const Spacer(flex: 2),
-              ElevatedButton(
-                child: Text('Convert', style: inputStyle),
-                onPressed: () {
-                  if (_startMeasure == null ||
-                      _convertedMeasure == null ||
-                      _numberFrom == 0) {
-                    return;
-                  } else {
-                    convert(_numberFrom, _startMeasure!, _convertedMeasure!);
-                  }
-                },
+              const SizedBox(height: 24), // Increase space before the button
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 40), // Add padding to the button
+                    backgroundColor: Colors.teal, // Match the button color with app theme
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // Rounded corners for a modern feel
+                    ),
+                  ),
+                  child: Text('Convert', style: inputStyle.copyWith(fontWeight: FontWeight.bold)),
+                  onPressed: () {
+                    if (_startMeasure == null ||
+                        _convertedMeasure == null ||
+                        _numberFrom == 0) {
+                      return;
+                    } else {
+                      convert(_numberFrom, _startMeasure!, _convertedMeasure!);
+                    }
+                  },
+                ),
               ),
-              const Spacer(flex: 2),
-              Text(
-                (_resultMessage == null) ? '' : _resultMessage!,
-                style: labelStyle,
+              const SizedBox(height: 24),
+              Center(
+                child: Text(
+                  (_resultMessage == null) ? '' : _resultMessage!,
+                  style: labelStyle.copyWith(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ),
               const Spacer(flex: 8),
             ],
           ),
         ),
-      ),
+      )
     );
   }
 }
